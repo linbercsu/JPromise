@@ -187,7 +187,7 @@ public class PromiseTest {
 
         Robolectric.getForegroundThreadScheduler().unPause();
 
-        verify(then, Mockito.times(1)).error(THROWABLE2);
+        verify(then, Mockito.times(1)).error(THROWABLE);
     }
 
     @Test
@@ -202,7 +202,7 @@ public class PromiseTest {
 
         Robolectric.getForegroundThreadScheduler().unPause();
 
-        verify(then, Mockito.times(1)).run("2");
+        verify(then, Mockito.times(1)).run("1");
     }
 
     @Test
