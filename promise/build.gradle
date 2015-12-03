@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 23
@@ -13,10 +16,110 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+group = 'net.zentertain.promise'
+version = '0.0.1'
+
+def siteUrl = 'https://github.com/linbercsu/JPromise'
+def gitUrl = 'https://github.com/linbercsu/JPromise.git'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives'] //When uploading configuration files
+    pkg {
+        repo = 'maven'
+        name = 'promise'
+        desc = 'A simple promise library on Android'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ['Apache-2.0']
+        labels = ['java', 'android', 'promise']
+        publicDownloadNumbers = true
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'A simple promise library on Android'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'linbercsu'
+                        name 'lin'
+                        email 'linlin.zhao@zenjoy.net'
+                    }
+                }
+                scm {
+                    connection 'https://github.com/linbercsu/JPromise.git'
+                    developerConnection 'https://github.com/linbercsu'
+                    url siteUrl
+
+                }
+            }
         }
     }
 }
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+task findConventions << {
+    println project.getConvention()
+}
+
+//publishing {
+//    publications {
+//        MyPublication(MavenPublication) {
+////            from components.java
+//            groupId 'net.zentertain.promise'
+//            artifactId 'promise'
+//            version '0.0.1-rc2'
+//
+//            artifact sourceJar
+//            artifact('./build/outputs/aar/promise-release.aar')
+//        }
+//    }
+//}
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
