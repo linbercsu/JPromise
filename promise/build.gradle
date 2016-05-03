@@ -1,3 +1,40 @@
+def versionNameStr = '1.0.0'
+
+def copyBinFile = { File src,File dest->
+
+    def input = src.newDataInputStream()
+    def output = dest.newDataOutputStream()
+
+    output << input
+
+    input.close()
+    output.close()
+}
+
+def copyOutPut = {File source, File target ->
+    if (target.exists()) {
+        target.delete()
+    }
+
+    target.getParentFile().mkdirs()
+
+    copyBinFile source, target
+}
+
+tasks.whenTaskAdded(new Action<Task>() {
+    @Override
+    void execute(Task task) {
+        if (task.name.equals('packageReleaseJar')) {
+            task.doLast {
+                for (File f : task.outputs.files.files) {
+                    copyOutPut f, new File('jars', "JPromise-${versionNameStr}.jar")
+                    break
+                }
+            }
+        }
+    }
+})
+
 apply plugin: 'com.android.library'
 
 android {
@@ -8,7 +45,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 23
         versionCode 1
-        versionName "0.0.2"
+        versionName "${versionNameStr}"
     }
     buildTypes {
         release {
@@ -19,6 +56,7 @@ android {
 
 }
 
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -27,5 +65,7 @@ dependencies {
     testCompile 'org.mockito:mockito-core:1.9.5'
     testCompile 'org.assertj:assertj-core:1.6.1'
 }
+
+
 
 
