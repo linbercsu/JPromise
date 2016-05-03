@@ -18,9 +18,10 @@ public abstract class Then<T> {
     protected Then() {
         handler = new Handler();
     }
-//    public void error(Throwable throwable) {
-//
-//    }
+
+    public void error(Throwable throwable) {
+
+    }
 
     public synchronized void performCancel() {
         if (cancel)

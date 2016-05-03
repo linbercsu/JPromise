@@ -35,7 +35,7 @@ public class PromiseThen extends PromiseWrapper {
     public void reject(Throwable throwable) {
         super.reject(throwable);
 
-//        then.error(throwable);
+        then.error(throwable);
 
         if (getWrapper() != null) {
             getWrapper().reject(throwable);
