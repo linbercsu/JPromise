@@ -24,18 +24,18 @@ public class PromiseThen extends PromiseWrapper {
 
     @Override
     protected void transfer(Promise source, Object value) {
-        try {
+//        try {
             then.run(value);
-        } catch (Throwable throwable) {
-            reject(throwable);
-        }
+//        } catch (Throwable throwable) {
+//            reject(throwable);
+//        }
     }
 
     @Override
     public void reject(Throwable throwable) {
         super.reject(throwable);
 
-        then.error(throwable);
+//        then.error(throwable);
 
         if (getWrapper() != null) {
             getWrapper().reject(throwable);

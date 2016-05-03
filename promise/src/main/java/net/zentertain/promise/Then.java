@@ -11,16 +11,16 @@ public abstract class Then<T> {
     private Handler handler;
     private Runnable resolvedRunnable;
     private Runnable rejectRunnable;
-    private boolean cancel;
+    private volatile boolean cancel;
 
     abstract public void run(T value);
 
     protected Then() {
         handler = new Handler();
     }
-    public void error(Throwable throwable) {
-
-    }
+//    public void error(Throwable throwable) {
+//
+//    }
 
     public synchronized void performCancel() {
         if (cancel)
