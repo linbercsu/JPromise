@@ -1,7 +1,5 @@
 package net.zentertain.promise;
 
-import android.support.annotation.NonNull;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -75,7 +73,6 @@ public abstract class ArrayThen<T> extends Then {
             return inner.isEmpty();
         }
 
-        @NonNull
         @Override
         public Iterator<T> iterator() {
             return inner.iterator();
@@ -91,7 +88,6 @@ public abstract class ArrayThen<T> extends Then {
             return inner.listIterator();
         }
 
-        @NonNull
         @Override
         public ListIterator<T> listIterator(int location) {
             return inner.listIterator(location);
@@ -127,19 +123,16 @@ public abstract class ArrayThen<T> extends Then {
             return inner.size();
         }
 
-        @NonNull
         @Override
         public List<T> subList(int start, int end) {
             return inner.subList(start, end);
         }
 
-        @NonNull
         @Override
         public Object[] toArray() {
             return inner.toArray();
         }
 
-        @NonNull
         @Override
         public <T1> T1[] toArray(T1[] array) {
             return (T1[]) inner.toArray(array);
