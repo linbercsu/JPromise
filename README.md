@@ -2,7 +2,7 @@
 
 ## How to use
 
-### Normal
+### Hello world
 ```
         Promise.promise("Hello world").then(new Then<String>(){
 
@@ -13,7 +13,7 @@
         });
 ```
 
-### handle error
+### Handle error
 ```
         Promise.promise("Hello world").then(new Then<String>(){
 
@@ -34,4 +34,28 @@
         });
 ```
 
+### Promise all
+```
+        Promise hello = Promise.promise("Hello");
+        Promise world = Promise.promise("World");
 
+        Promise.all(hello, world).then(new ArrayThen<String>(){
+
+            @Override
+            protected void doRun(List<String> result) {
+
+            }
+        });
+```
+### Promise race
+```
+        Promise hello = Promise.promise("Hello");
+        Promise world = Promise.promise("World");
+
+        Promise.race(hello, world).then(new Then() {
+            @Override
+            protected void then(Object value) throws Throwable {
+
+            }
+        });
+```
