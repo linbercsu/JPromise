@@ -13,7 +13,13 @@ public abstract class Then<T> {
     private Runnable rejectRunnable;
     private volatile boolean cancel;
 
-    abstract public void run(T value);
+    public void run(T value) {
+        try {
+            then(value);
+        } catch (Throwable error) {
+            reject(error);
+        }
+    }
 
     protected Then() {
         handler = new Handler();
@@ -22,6 +28,8 @@ public abstract class Then<T> {
     public void error(Throwable throwable) {
 
     }
+
+    protected abstract void then(T value) throws Throwable;
 
     public synchronized void performCancel() {
         if (cancel)
@@ -67,7 +75,7 @@ public abstract class Then<T> {
 
     }
 
-    protected synchronized void reject(final Throwable throwable) {
+    private synchronized void reject(final Throwable throwable) {
         if (cancel)
             return;
 

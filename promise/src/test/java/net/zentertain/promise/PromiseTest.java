@@ -41,7 +41,7 @@ public class PromiseTest {
 
         Promise.promise("1").then(new Then() {
             @Override
-            public void run(Object value) {
+            protected void then(Object value) throws Throwable {
                 resolve(value);
             }
         }).then(then);
@@ -81,7 +81,7 @@ public class PromiseTest {
 
         Robolectric.getForegroundThreadScheduler().unPause();
 
-        verify(then, Mockito.never()).run("1");
+        verify(then, Mockito.never()).run(Mockito.any());
 
         verify(then).cancel();
         verify(then1).cancel();
@@ -111,7 +111,7 @@ public class PromiseTest {
 
         Promise promise1 = Promise.promise("1").then(new Then() {
             @Override
-            public void run(Object value) {
+            protected void then(Object value) throws Throwable {
 
             }
         });
@@ -131,8 +131,8 @@ public class PromiseTest {
 
         Promise promise1 = Promise.promise("1").then(new Then() {
             @Override
-            public void run(Object value) {
-                reject(THROWABLE);
+            protected void then(Object value) throws Throwable {
+                throw THROWABLE;
             }
         });
         Promise promise2 = Promise.promise("2");
@@ -152,8 +152,8 @@ public class PromiseTest {
         Promise promise1 = Promise.promise("1");
         Promise promise2 = Promise.promise("2").then(new Then() {
             @Override
-            public void run(Object value) {
-                reject(THROWABLE);
+            protected void then(Object value) throws Throwable {
+                throw THROWABLE;
             }
         });
 
@@ -171,14 +171,14 @@ public class PromiseTest {
 
         Promise promise1 = Promise.promise("1").then(new Then() {
             @Override
-            public void run(Object value) {
-                reject(THROWABLE);
+            protected void then(Object value) throws Throwable {
+                throw THROWABLE;
             }
         });
         Promise promise2 = Promise.promise("2").then(new Then() {
             @Override
-            public void run(Object value) {
-                reject(THROWABLE2);
+            protected void then(Object value) throws Throwable {
+                throw THROWABLE2;
             }
         });
 
@@ -212,7 +212,7 @@ public class PromiseTest {
         Promise promise1 = Promise.promise("1").then(new TestThen2());
         Promise promise2 = Promise.promise("2").then(new Then() {
             @Override
-            public void run(Object value) {
+            protected void then(Object value) throws Throwable {
 
             }
         });
@@ -229,7 +229,7 @@ public class PromiseTest {
     public static class TestThen extends Then<String> {
 
         @Override
-        public void run(String value) {
+        protected void then(String value) throws Throwable {
 
         }
     }
@@ -237,8 +237,8 @@ public class PromiseTest {
     public static class TestThen2 extends Then {
 
         @Override
-        public void run(Object value) {
-            reject(THROWABLE);
+        protected void then(Object value) throws Throwable {
+            throw THROWABLE;
         }
     }
 

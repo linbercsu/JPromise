@@ -9,9 +9,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 public abstract class ArrayThen<T> extends Then {
-
     @Override
-    public void run(Object value) {
+    protected void then(Object value) throws Throwable {
         Object[] array = (Object[]) value;
         doRun(new WrapperList<T>(Arrays.asList(array)));
     }
