@@ -75,7 +75,7 @@ public abstract class Then<T> {
 
     }
 
-    private synchronized void reject(final Throwable throwable) {
+    protected synchronized void reject(final Throwable throwable) {
         if (cancel)
             return;
 

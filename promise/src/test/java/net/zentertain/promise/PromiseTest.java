@@ -225,6 +225,45 @@ public class PromiseTest {
         verify(then, Mockito.times(1)).error(THROWABLE);
     }
 
+    @Test
+    public void should_test_asyncThen() throws Throwable {
+        Robolectric.getForegroundThreadScheduler().pause();
+
+        TestThen then = Mockito.spy(new TestThen());
+
+        Promise.promise("1").then(new AsyncThen<String>() {
+            @Override
+            protected Object doInBackground(String value) throws Throwable {
+                return value;
+            }
+        }).then(then);
+
+        Robolectric.getForegroundThreadScheduler().unPause();
+
+        verify(then, Mockito.times(1)).then("1");
+    }
+
+    @Test
+    public void should_test_asyncThen_cancel() throws Throwable {
+        Robolectric.getForegroundThreadScheduler().pause();
+        Robolectric.getBackgroundThreadScheduler().pause();
+
+        TestThen then = Mockito.spy(new TestThen());
+
+        Promise promise = Promise.promise("1").then(new AsyncThen<String>() {
+            @Override
+            protected Object doInBackground(String value) throws Throwable {
+                return value;
+            }
+        }).then(then);
+
+        Robolectric.getForegroundThreadScheduler().unPause();
+        promise.cancel();
+        Robolectric.flushBackgroundThreadScheduler();
+
+        verify(then, Mockito.never()).then(Mockito.anyString());
+    }
+
 
     public static class TestThen extends Then<String> {
 
