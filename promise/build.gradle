@@ -27,7 +27,7 @@ tasks.whenTaskAdded(new Action<Task>() {
         if (task.name.equals('packageReleaseJar')) {
             task.doLast {
                 for (File f : task.outputs.files.files) {
-                    copyOutPut f, new File('jars', "JPromise-${versionNameStr}.jar")
+                    copyOutPut f, new File('jars', "promise-${versionNameStr}.jar")
                     break
                 }
             }
@@ -36,6 +36,7 @@ tasks.whenTaskAdded(new Action<Task>() {
 })
 
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 23
@@ -65,6 +66,44 @@ dependencies {
     testCompile 'org.mockito:mockito-core:1.9.5'
     testCompile 'org.assertj:assertj-core:1.6.1'
 }
+
+group = 'net.zentertain.promise'
+
+def siteUrl = 'https://github.com/linbercsu/JPromise'
+def gitUrl = 'https://github.com/linbercsu/JPromise.git'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+//    configurations = ['archives'] //When uploading configuration files
+    filesSpec {
+        from 'jars'
+        into "net/zentertain/promise/promise/${versionNameStr}"
+    }
+    pkg {
+        repo = 'maven'
+        name = 'promise'
+        desc = 'A simple promise library on Android'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ['Apache-2.0']
+        labels = ['java', 'android', 'promise']
+        publicDownloadNumbers = true
+
+        version {
+            name = '1.0.0'
+            vcsTag = 'v1.0.0'
+
+        }
+    }
+}
+
+
+
 
 
 
