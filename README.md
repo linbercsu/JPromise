@@ -2,6 +2,21 @@
 
 ## How to use
 
+### Gradle
+
+```
+        repositories {
+            maven {
+                url  "http://dl.bintray.com/linbercsu/maven"
+            }
+        }
+
+```
+
+```
+        compile 'net.zentertain.promise:promise:1.0.0'
+```
+
 ### Hello world
 ```
         Promise.promise("Hello world").then(new Then<String>(){
